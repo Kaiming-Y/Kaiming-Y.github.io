@@ -69,46 +69,70 @@
       "lead": "CriticGUI evaluates whether a multimodal LLM can judge a GUI action correctly and explain its outcome. The focus is state-aware, instruction-grounded criticism—not action generation.",
       "sections": [
         [
-          "What is being evaluated?",
-          "<p>Each example pairs a hierarchical instruction (goal, subtask and atomic action) with action code, before-and-after screenshots and an action video. The critic predicts success or failure and gives a reason.</p><p>The unit is the current atomic instruction. Selecting a text box can be correct even when the overall editing task remains unfinished. A useful critic must understand that granularity and the change between states.</p>"
+          "Why a critic needs to observe state",
+          "<p>A plan can describe the intended steps, but it cannot guarantee what the interface will do. Opening a dialog may change the screen substantially; focusing a field may barely change it. The next instruction needs to be grounded in the state actually reached.</p>"
         ],
         [
-          "How the data is collected",
-          "<p>The FYP describes two collection modes: autonomous agent exploration, and exploration guided by a plan refined by humans. Interactions are recorded, segmented into semantic atomic actions, and aligned with screenshots and video clips.</p><p>MLLM-assisted annotation is followed by human checks of instructions, media alignment, success/failure labels and reasons. Atomic instructions are grounded in the original goal and pre-action state, so a wrong action does not redefine the target. Cleaning removes redundant or invalid examples.</p><p>The resulting thesis dataset contains <strong>540 examples from 56 tasks</strong>: 266 successful and 274 failed actions, spanning Acrobat, PowerPoint, Word, Windows Settings and web tasks. The pipeline also includes a human-demonstration entry point, as illustrated above.</p>"
+          "What exactly is being judged?",
+          "<p>The critic receives the instruction hierarchy, action code and visual evidence. It returns a success/failure label and an explanation. A semantic atomic action may contain several physical inputs; it is not necessarily a single click.</p><div class=\"instruction-levels\"><div><span>01 / Goal</span><p>Add a watermark saying “Draft”.</p></div><div><span>02 / Subtask</span><p>Enter “Draft” and apply the watermark.</p></div><div><span>03 / Atomic action</span><p>Focus the watermark text field.</p></div></div><p><strong>Judge the current instruction.</strong> Focusing the field can be successful even though the watermark has not yet been created.</p>"
+        ],
+        [
+          "A hard case: the clue is small",
+          "<p>In this example, the goal is to add a link to a word, while the current instruction is to select the link-editing tool. Much of the document looks unchanged. The judgment depends on small interface cues highlighted in the example; a coarse view of the final screen can miss them.</p>"
+        ],
+        [
+          "Build a sample around one atomic action",
+          "<p>Each sample aligns one atomic instruction with its action code, before/after screenshots and a matching video clip. The illustrated sample checks whether “GUICritic” was entered into a signature field. Its label and explanation refer to that local result, not the completion of the full signature workflow.</p>"
+        ],
+        [
+          "From action logs to aligned examples",
+          "<p>The atomic-action parser removes irrelevant statements, tokenizes the action code, and scans it against predefined action patterns. Matching tokens are grouped into semantic actions; unmatched tokens use a single-token fallback. The resulting segments provide boundaries for aligning screenshots and video.</p><p>Data comes from autonomous exploration and human-guided collection, followed by model-assisted annotation, human checks and cleaning. Instructions must reflect the intended goal and pre-action state, so an incorrect execution does not redefine success.</p>"
         ],
         [
           "What the experiment found",
-          "<p>The thesis reports the following GPT-4o results under its dataset and evaluation protocol:</p><div class=\"article-table\"><table><thead><tr><th>Metric</th><th>Reported result</th></tr></thead><tbody><tr><td>Accuracy</td><td>73.3%</td></tr><tr><td>Balanced accuracy</td><td>73.9%</td></tr><tr><td>True positive rate</td><td>84.9%</td></tr><tr><td>True negative rate</td><td>63.0%</td></tr></tbody></table></div><p>Recognizing failures was harder than recognizing successes. Error analysis highlights overreliance on the final screenshot, missed state changes and confusion between atomic progress and full-task completion.</p>"
+          "<p>The initial dataset contains 540 examples from 56 tasks (266 successful and 274 failed actions), covering Acrobat, PowerPoint, Word, Windows Settings and web tasks. GPT-4o achieved the following results:</p><div class=\"article-table\"><table><thead><tr><th>Metric</th><th>Reported result</th></tr></thead><tbody><tr><td>Accuracy</td><td>73.3%</td></tr><tr><td>Balanced accuracy</td><td>73.9%</td></tr><tr><td>True positive rate</td><td>84.9%</td></tr><tr><td>True negative rate</td><td>63.0%</td></tr></tbody></table></div><p>Recognizing failures was harder than recognizing successes. Error analysis highlights overreliance on the final screenshot, missed state changes and confusion between atomic progress and full-task completion.</p>"
         ],
         [
           "What remains open",
           "<p>This is a compact, offline benchmark with an initial GPT-4o evaluation. It does not establish performance across current models or prove that a critic improves an online agent.</p><p>BERTScore is proposed for comparing explanations, but the reported classification table does not establish explanation faithfulness. Broader model coverage and direct checks of whether reasons match the visual evidence remain important next steps.</p>"
         ]
       ],
-      "sources": "Kaiming Yang, FYP Report, Chapter 5 (CriticGUI data and evaluation design), Tables 5.2 and 6.4, and Section 6.3 (critic evaluation and error analysis)."
+      "sources": "This was my undergraduate final-year project, completed at <a href=\"https://en.nusricq.cn/\" target=\"_blank\" rel=\"noopener noreferrer\">NUS (Chongqing) Research Institute (NUSRI-CQ)</a>."
     },
     "zh": {
       "subtitle": "多模态 LLM 能否成为 GUI 智能体可靠的 Critic？",
       "lead": "CriticGUI 评估多模态 LLM 能否正确判断 GUI 动作的结果，并解释原因。核心是以状态感知与指令理解为依据的 Critic 能力，而非动作生成。",
       "sections": [
         [
-          "评估什么",
-          "<p>每条样本包含分层指令（目标、子任务、原子动作）、动作代码、前后截图和操作视频。Critic 输出成功或失败标签，并解释判断原因。</p><p>评估单位是当前原子指令。即使整项编辑任务没有结束，“选中文本框”也可能是正确操作。模型需要理解这种粒度，并比较动作前后的状态变化。</p>"
+          "为什么 Critic 必须观察状态",
+          "<p>计划描述的是预期步骤，不能保证界面实际如何变化。打开对话框可能带来显著变化，选中输入框却可能只改变一个细小标记。下一步指令必须以真正到达的界面状态为依据。</p>"
         ],
         [
-          "数据如何采集",
-          "<p>FYP 描述了两种模式：智能体自主探索，以及由人工修订计划引导的探索。交互被记录后，切分为语义完整的原子动作，并与截图和视频片段对齐。</p><p>MLLM 辅助标注后，人工检查指令、媒体对齐、成败标签与解释。原子指令依据原始目标和动作前状态确定，避免用错误操作反过来定义目标；最后清除重复或无效样本。</p><p>论文数据集包含 <strong>56 个任务、540 条样本</strong>，其中成功 266 条、失败 274 条，覆盖 Acrobat、PowerPoint、Word、Windows Settings 与网页任务。流程图中也包含人工示范这一采集入口。</p>"
+          "到底评判哪一级动作？",
+          "<p>Critic 接收分层指令、动作代码和视觉证据，输出成败标签及原因。一个语义原子动作可以包含多个物理操作，并不一定等于一次点击。</p><div class=\"instruction-levels\"><div><span>01 / 目标</span><p>添加内容为“Draft”的水印。</p></div><div><span>02 / 子任务</span><p>输入“Draft”并应用水印。</p></div><div><span>03 / 原子动作</span><p>将焦点放到水印文本输入框。</p></div></div><p><strong>判断当前指令，而不是整项任务。</strong> 即使水印尚未生成，成功选中输入框也意味着当前步骤完成。</p>"
+        ],
+        [
+          "困难案例：决定成败的细小线索",
+          "<p>这个案例的总目标是给一个词添加链接，当前指令却只是选择链接编辑工具。文档主体几乎没有变化，判断依赖图中标出的局部界面线索；只粗略查看最终截图，很容易遗漏关键证据。</p>"
+        ],
+        [
+          "围绕一个原子动作构建样本",
+          "<p>每条样本将一个原子指令与对应代码、前后截图和视频片段对齐。图中样本检查是否在签名输入框中输入了“GUICritic”，标签和解释针对这一局部结果，而不是整个签名流程是否完成。</p>"
+        ],
+        [
+          "从动作日志到对齐的样本",
+          "<p>原子动作解析器先清理无关语句，将动作代码转成 token，再依次匹配预定义动作模式。匹配的 token 被组合为语义动作，未匹配的 token 则单独保留。这些分段为截图与视频对齐提供边界。</p><p>数据来自自主探索与人工引导采集，随后经过模型辅助标注、人工检查和清洗。指令应依据原始目标和动作前状态确定，避免用错误执行反过来定义“成功”。</p>"
         ],
         [
           "实验发现",
-          "<p>FYP 中 GPT-4o 在该数据集与协议下的结果如下：</p><div class=\"article-table\"><table><thead><tr><th>指标</th><th>报告结果</th></tr></thead><tbody><tr><td>Accuracy</td><td>73.3%</td></tr><tr><td>Balanced accuracy</td><td>73.9%</td></tr><tr><td>True positive rate</td><td>84.9%</td></tr><tr><td>True negative rate</td><td>63.0%</td></tr></tbody></table></div><p>识别失败比识别成功更困难。错误分析发现，模型容易过度依赖最终截图、遗漏状态变化，以及混淆原子步骤进展与整项任务完成。</p>"
+          "<p>初始数据集包含 56 个任务的 540 条样本（266 条成功、274 条失败），覆盖 Acrobat、PowerPoint、Word、Windows Settings 与网页任务。GPT-4o 的结果如下：</p><div class=\"article-table\"><table><thead><tr><th>指标</th><th>报告结果</th></tr></thead><tbody><tr><td>Accuracy</td><td>73.3%</td></tr><tr><td>Balanced accuracy</td><td>73.9%</td></tr><tr><td>True positive rate</td><td>84.9%</td></tr><tr><td>True negative rate</td><td>63.0%</td></tr></tbody></table></div><p>识别失败比识别成功更困难。错误分析发现，模型容易过度依赖最终截图、遗漏状态变化，以及混淆原子步骤进展与整项任务完成。</p>"
         ],
         [
           "还有哪些边界",
           "<p>这是一个小规模离线基准，初步实验以 GPT-4o 为中心，不能直接代表当前所有模型，也不能证明接入 Critic 就会提升在线智能体的成功率。</p><p>论文提出用 BERTScore 比较解释，但分类结果表并不能证明解释忠实于事实。扩大模型覆盖，并直接核验原因是否符合视觉证据，是后续需要补充的部分。</p>"
         ]
       ],
-      "sources": "杨铠铭，FYP Report，第 5 章（CriticGUI 数据与评估设计）、表 5.2、表 6.4，以及第 6.3 节（Critic 评测与错误分析）。"
+      "sources": "这是我的本科毕业设计，在<a href=\"https://www.nusricq.cn/\" target=\"_blank\" rel=\"noopener noreferrer\">新加坡国立大学重庆研究院（NUSRI-CQ）</a>完成。"
     }
   }
 }
