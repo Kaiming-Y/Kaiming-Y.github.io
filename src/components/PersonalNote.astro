@@ -1,0 +1,10 @@
+---
+import Icon from './ProfileIcon.astro';
+const {lang}=Astro.props;
+const en=lang==='en';
+---
+<details class="personal-note" id="beyond-research">
+<summary><span class="personal-note-icon"><Icon name="music"/></span><span>{en?'A little beyond research':'研究之外的一点我'}<small>{en?'Curiosity, building, and a good soundtrack.':'好奇心、动手创造，还有喜欢的音乐。'}</small></span><span class="personal-toggle" aria-hidden="true">+</span></summary>
+<div class="personal-content"><figure><button class="project-image supplied-image" type="button" data-figure-src="/images/studio.png" data-figure-title={en?'An imagined corner of my world':'想象中的一方天地'} data-figure-alt="AI illustration of Kaiming at a desk overlooking Singapore" aria-haspopup="dialog" aria-label={en?'Enlarge my AI portrait':'放大 AI 肖像'}><img src="/images/studio.png" alt={en?'An AI-drawn portrait of me, surrounded by research notes and music in Singapore':'AI 绘制的我：新加坡夜景、研究笔记与音乐'} loading="lazy"/></button><figcaption>{en?'An AI-illustrated version of my world.':'AI 画笔下，我的一方天地。'}</figcaption></figure>
+<div class="personal-copy"><span class="personal-kicker">{en?'Driven by curiosity':'好奇心是起点'}</span><h2>{en?'Ideas worth exploring. Things worth building.':'探索值得追问的问题，做出真正有用的东西。'}</h2><p>{en?'I love the open questions in research—and the work of turning an idea into something that actually runs. Curiosity keeps me asking why; an inner drive to build keeps me learning, experimenting and following through.':'我热爱研究中那些尚无答案的问题，也享受把想法变成真正运行起来的系统。好奇心让我不断追问，内在的驱动力则让我持续学习、实验，并把事情做下去。'}</p><div class="music-note"><Icon name="music"/><div><strong>{en?'A soundtrack for the journey':'一路相伴的音乐'}</strong><p>{en?'Away from research, music is a constant. JJ Lin is a longtime favorite—his songs are often part of my day.':'研究之外，音乐一直是生活里重要的一部分。我很喜欢林俊杰，他的歌常常陪伴我的日常。'}</p></div></div></div></div>
+</details>

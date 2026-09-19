@@ -1,0 +1,4 @@
+---
+const {src,title,caption,lang='en'}=Astro.props;
+---
+<figure class="article-figure"><button type="button" class="project-image supplied-image" data-figure-src={src} data-figure-alt={title} data-figure-title={title} aria-haspopup="dialog" aria-label={lang==='en'?`Enlarge ${title}`:`放大 ${title}`}><img src={src} alt={title} loading="lazy"/><span class="figure-open">{lang==='en'?'View full figure':'查看高清图'} ⤢</span></button>{caption&&<figcaption>{caption}</figcaption>}</figure>

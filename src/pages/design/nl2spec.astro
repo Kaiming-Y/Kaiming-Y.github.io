@@ -1,0 +1,6 @@
+---
+import Shell from '../../components/Shell.astro';
+import ArticleFigure from '../../components/ArticleFigure.astro';
+const names=['nl2spec++','framework','method1','method2','prompt_1','prompt_2'];
+---
+<Shell lang="en" home="/" alternate="/zh/"><div class="comparison-page"><a class="subtle-link" href="/#nl2spec">← Back to project</a><h1>nl2spec++ · Figure comparison</h1><p>Original repository images, the generated visual draft, and the Python-built figures. Click any image to enlarge.</p><section><h2>Visual draft</h2><ArticleFigure src="/images/nl2spec/generated-draft.png" title="AI-generated visual draft" lang="en"/></section>{names.map(name=><section><h2>{name}</h2><div class="comparison-grid"><div><h3>Original</h3><ArticleFigure src={`/images/nl2spec/original/${name}.png`} title={`${name} · original`} lang="en"/></div><div><h3>Python-built</h3><ArticleFigure src={`/images/nl2spec/rebuilt/${name}.png`} title={`${name} · rebuilt`} lang="en"/><a class="small-pill" href={`/images/nl2spec/rebuilt/${name}.svg`} download>Download editable SVG ↓</a></div></div></section>)}</div></Shell>

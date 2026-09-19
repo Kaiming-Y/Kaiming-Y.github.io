@@ -1,0 +1,6 @@
+---
+import Blog from '../../components/Blog.astro';
+export function getStaticPaths(){return ['criticgui','nl2spec'].map(slug=>({params:{slug}}))}
+const {slug}=Astro.params;
+---
+<Blog lang="en" slug={slug}/>

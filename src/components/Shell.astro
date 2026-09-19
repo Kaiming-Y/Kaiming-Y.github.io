@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+import {copy, type Lang} from '../data/portfolio';
+const {lang='zh',title='Kaiming Yang · 杨铠铭',alternate='/en/',home='/'}=Astro.props as {lang:Lang,title?:string,alternate?:string,home?:string};
+const t=copy[lang];
+---
+<!doctype html><html lang={lang==='zh'?'zh-CN':'en'}><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>{title}</title><meta name="description" content={lang==='zh'?'杨铠铭 · NUS Showlab · Research Intern at Huawei · Proactive Agents、Computer-use Agents 与空间智能。':'Kaiming Yang · NUS Showlab · Research Intern at Huawei · Proactive agents, computer-use agents and spatial intelligence.'}/><link rel="icon" href="/favicon.svg"/><link rel="alternate" hreflang={lang==='zh'?'en':'zh-CN'} href={alternate}/><script is:inline>try{const v=localStorage.getItem('portfolio-theme');document.documentElement.dataset.theme=v||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch{document.documentElement.dataset.theme='light'}</script></head><body>
+<a class="skip" href="#main">{lang==='zh'?'跳到正文':'Skip to content'}</a><div class="ambient" aria-hidden="true"></div>
+<header class="header"><span class="header-spacer" aria-hidden="true"></span><nav aria-label={lang==='zh'?'主导航':'Main navigation'}>{['about','education','experience','work'].map((id,i)=><a href={`${home}#${id}`}>{t.nav[i]}</a>)}</nav><div class="controls"><a class="lang-switch" href={alternate} aria-label={t.language}>{lang==='zh'?'EN':'中'}</a><span class="control-divider"></span><button class="theme-switch" aria-label={t.theme} title={t.theme}><svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 15A8.5 8.5 0 019 4a8.5 8.5 0 1011 11Z"/></svg></button></div></header>
+<main id="main"><slot/></main><footer><span>© 2026 Kaiming Yang</span><span>{t.footer}</span><a href="mailto:ykaiming@u.nus.edu">ykaiming@u.nus.edu ↗</a></footer>
+<dialog class="figure-dialog" aria-labelledby="figure-title"><div class="figure-toolbar"><h2 id="figure-title"></h2><button type="button" class="figure-close" aria-label={lang==='en'?'Close image':'关闭图片'} autofocus><span aria-hidden="true">×</span></button></div><div class="figure-view"><img class="figure-full" alt=""/></div></dialog>
+<script>
+const dialog=document.querySelector<HTMLDialogElement>('.figure-dialog')!;
+const fullImage=dialog.querySelector<HTMLImageElement>('.figure-full')!;
+let figureTrigger:HTMLButtonElement|null=null;
+document.querySelectorAll<HTMLButtonElement>('[data-figure-src]').forEach(trigger=>trigger.addEventListener('click',()=>{
+ figureTrigger=trigger;fullImage.src=trigger.dataset.figureSrc!;fullImage.alt=trigger.dataset.figureAlt||'';
+ dialog.querySelector('#figure-title')!.textContent=trigger.dataset.figureTitle||'';
+ dialog.showModal();document.documentElement.classList.add('figure-is-open');
+}));
+dialog.querySelector('.figure-close')?.addEventListener('click',()=>dialog.close());
+dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close()}});
+dialog.addEventListener('close',()=>{document.documentElement.classList.remove('figure-is-open');figureTrigger?.focus({preventScroll:true})});
+const button=document.querySelector<HTMLButtonElement>('.theme-switch');
+button?.addEventListener('click',()=>{const theme=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=theme;try{localStorage.setItem('portfolio-theme',theme)}catch{};button.setAttribute('aria-pressed',String(theme==='dark'))});
+button?.setAttribute('aria-pressed',String(document.documentElement.dataset.theme==='dark'));
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.animate([{opacity:.55,transform:'translateY(9px)'},{opacity:1,transform:'translateY(0)'}],{duration:360,easing:'ease-out'});observer.unobserve(e.target)}}),{threshold:.05});document.querySelectorAll('.project-card,.experience-row,.education-row,.research-focus>li').forEach(el=>observer.observe(el))}
+const navLinks=[...document.querySelectorAll<HTMLAnchorElement>('.header nav a')];
+const navSections=navLinks.map(link=>document.getElementById(link.hash.slice(1))).filter((el):el is HTMLElement=>!!el);
+if(navSections.length){
+ let scheduled=false;
+ const updateNav=()=>{let active=navSections[0];for(const section of navSections){if(section.getBoundingClientRect().top<=180)active=section}navLinks.forEach(link=>{if(link.hash==='#'+active.id)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current')});scheduled=false};
+ window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(updateNav)}},{passive:true});updateNav();
+}
+</script></body></html>

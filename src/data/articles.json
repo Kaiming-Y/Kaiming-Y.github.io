@@ -1,0 +1,114 @@
+{
+  "nl2spec": {
+    "en": {
+      "subtitle": "From two sentences to an implicit temporal relation",
+      "lead": "Requirements rarely arrive as a single, self-contained statement. nl2spec++ explores how a language model can connect information across sentences and express the inferred relationship as a temporal specification.",
+      "sections": [
+        [
+          "The missing link between sentences",
+          "<p>Suppose one requirement connects A to B, while another connects B to C. Neither directly describes A and C. Translating each sentence independently preserves the explicit statements, but leaves the relationship we actually want unresolved.</p><p>nl2spec++ extends <a href=\"https://github.com/realChrisHahn2/nl2spec\">nl2spec</a> with this cross-sentence reasoning step. Its input is two related natural-language sentences and two target entities, one from each sentence. A shared intermediate entity provides the connection; the desired output is a candidate relationship expressed in linear temporal logic (LTL).</p>"
+        ],
+        [
+          "Two routes through the same problem",
+          "<h3>Method 1: reason in language, then translate</h3><p>The model first infers a natural-language statement linking the target entities. The translation module then turns that statement into LTL. Keeping an intermediate explanation in ordinary language makes the proposed relationship easier to inspect before formalization.</p><h3>Method 2: translate first, then reason over formulas</h3><p>Each input sentence is translated separately. A second LLM call receives the two formulas and the target entities, and proposes their relationship in LTL. This route makes the formal intermediate representations explicit, but its reasoning step is still performed by a language model, not a theorem prover.</p><p>The two routes are alternatives selected by the user. They are not successive stages of one pipeline.</p>"
+        ],
+        [
+          "A small example",
+          "<p>The repository’s formula-reasoning prompt includes an eventual-response example. Read <code>G</code> as “always” and <code>F</code> as “eventually”:</p><pre><code>G(A → F B)\nG(B → F C)\n────────────\nG(A → F C)</code></pre><p>Whenever A occurs, B must eventually occur; whenever B occurs, C must eventually occur. Together, these requirements imply that A is eventually followed by C. This illustrates a temporal dependency, not a causal claim. It is an explanatory example from the prompt, not a reported benchmark result.</p>"
+        ],
+        [
+          "What the implementation actually does",
+          "<p>The command-line entry point passes the selected method to <code>src/backend.py</code>. Method 1 calls the semantic reasoning prompt before the translation module; Method 2 translates both inputs before calling the formula reasoning prompt. The repository separates semantic extraction, formula reasoning and translation so the intermediate representations remain inspectable.</p><p>The translation path samples candidate formulas, attempts to parse them with an LTLf parser, and selects the most frequent candidate with a frequency-based certainty score. That score reflects agreement among sampled outputs; it is not a calibrated probability of correctness. Parse failures can remain as raw strings, and the final formula-reasoning output in Method 2 does not pass through an equivalent end-to-end proof check.</p>"
+        ],
+        [
+          "Where this prototype needs care",
+          "<p>Formal-looking output can still be wrong. Correct syntax does not establish that a formula follows from the input, and a repeated answer can repeat the same mistake. A further issue is semantic consistency: the prompts use LTL terminology, while parsing uses an LTLf library, so finite- and infinite-trace interpretations need to be made explicit before verification.</p><p>Some prompt examples also overreach: temporal ordering alone does not justify a causal explanation. These examples should be audited before treating the system as a reliable specification tool.</p><p>The repository identifies broader application scenarios, reasoning over more than two sentences, and a dedicated benchmark as future work. It does not report a comparative benchmark establishing that one route is more accurate than the other. This article explains the checked-in design and code; it does not claim a fresh execution of the legacy model integrations.</p>"
+        ],
+        [
+          "Why this direction interests me",
+          "<p>The useful connection here is between flexible language understanding and explicit, inspectable constraints. An LLM can propose the hidden relationship; formal tools can then help test whether that proposal is justified. A next step would be an entailment check that searches for a counterexample to the candidate formula, alongside a benchmark that separates translation errors from reasoning errors.</p><p>This is the distinction I want the project to make visible: producing a specification is the beginning of validation, not its completion.</p>"
+        ]
+      ],
+      "sources": "<a href=\"https://github.com/Kaiming-Y/nl2spec_plus\">Repository & README</a> · <a href=\"https://github.com/Kaiming-Y/nl2spec_plus/blob/main/src/backend.py\">Method routing</a> · <a href=\"https://github.com/Kaiming-Y/nl2spec_plus/tree/main/src/translation\">Translation implementation</a> · <a href=\"https://github.com/realChrisHahn2/nl2spec\">Original nl2spec</a>"
+    },
+    "zh": {
+      "subtitle": "从两句话中，找到没有被直接说出的时序关系",
+      "lead": "需求往往散落在不同句子中。nl2spec++ 探索如何用语言模型连接跨句信息，再把推理出的关系写成明确的时序规约。",
+      "sections": [
+        [
+          "跨句信息中的缺口",
+          "<p>一句话描述 A 与 B，另一句话描述 B 与 C，但都没有直接说明 A 与 C。逐句翻译可以保留显式信息，却不一定回答我们真正关心的关系。</p><p>nl2spec++ 在开源 <a href=\"https://github.com/realChrisHahn2/nl2spec\">nl2spec</a> 的基础上加入跨句关系推理。输入是两句相关的自然语言，以及分别来自两句中的两个目标实体。共享实体连接这两句话，输出则是用线性时序逻辑（LTL）表达的候选关系。</p>"
+        ],
+        [
+          "同一问题的两条路径",
+          "<h3>方法一：先推理，再翻译</h3><p>先由语言模型用自然语言描述两个目标实体之间的关系，再通过翻译模块转成 LTL。中间保留自然语言表达，便于检查模型究竟推断了什么。</p><h3>方法二：先翻译，再进行公式推理</h3><p>先分别翻译两个输入句子，再将两条公式和目标实体交给语言模型，得到候选 LTL 关系。这里的形式化中间表示更明确，但推理仍由 LLM 完成，并非定理证明器的推导。</p><p>两条路径由用户选择，不是前后串联的两个阶段。</p>"
+        ],
+        [
+          "一个简短例子",
+          "<p>仓库的公式推理提示词包含下面这个例子，其中 <code>G</code> 表示“始终”，<code>F</code> 表示“最终”：</p><pre><code>G(A → F B)\nG(B → F C)\n────────────\nG(A → F C)</code></pre><p>A 出现后最终会出现 B，而 B 出现后最终会出现 C，因此 A 出现后最终会出现 C。这表达的是时序依赖，不是因果关系。它用于解释方法，来自提示词示例，不是一次基准实验的结果。</p>"
+        ],
+        [
+          "代码实际实现了什么",
+          "<p>命令行入口通过 <code>src/backend.py</code> 选择流程。方法一先调用语义推理，再调用翻译模块；方法二先翻译两个句子，再调用公式推理。语义提取、公式推理与翻译被拆成独立模块，便于观察中间结果。</p><p>翻译路径对模型输出进行多次采样，尝试用 LTLf 解析器解析公式，再按出现频率选择结果并计算 certainty score。这个分数反映采样输出的一致程度，不是经过校准的正确率。解析失败的结果仍可能以原始字符串保留，而方法二最终生成的公式也没有经过同等的端到端证明检查。</p>"
+        ],
+        [
+          "原型的边界",
+          "<p>看起来形式化的输出仍可能是错的。语法正确不代表公式可以从输入推出，多次生成相同答案也可能只是重复同一个错误。此外，提示词使用 LTL 术语，解析模块使用 LTLf 库；真正验证前，需要明确有限轨迹与无限轨迹的语义。</p><p>部分提示词示例也需要审查：事件的先后顺序不能单独证明因果关系。不能把模型补出的解释直接当成有效推论。</p><p>仓库将应用场景、更多句子的关系推理与专门 benchmark 列为后续工作，目前没有对比实验可以证明哪条路径更准确。本文解释已有代码设计，不声称重新运行了其中较早的模型接口。</p>"
+        ],
+        [
+          "我关心的下一步",
+          "<p>这个方向连接了灵活的语言理解与明确、可检查的约束。LLM 可以提出候选关系，形式化工具则可以检查它是否成立。下一步可以加入蕴含检查，寻找违反候选公式的反例，并通过基准分别分析翻译错误与推理错误。</p><p>生成规约是验证的起点，而不是验证的完成。</p>"
+        ]
+      ],
+      "sources": "<a href=\"https://github.com/Kaiming-Y/nl2spec_plus\">仓库与 README</a> · <a href=\"https://github.com/Kaiming-Y/nl2spec_plus/blob/main/src/backend.py\">流程实现</a> · <a href=\"https://github.com/Kaiming-Y/nl2spec_plus/tree/main/src/translation\">翻译模块</a> · <a href=\"https://github.com/realChrisHahn2/nl2spec\">原始 nl2spec</a>"
+    }
+  },
+  "criticgui": {
+    "en": {
+      "subtitle": "Can a multimodal LLM be a reliable critic for GUI agents?",
+      "lead": "CriticGUI evaluates whether a multimodal LLM can judge a GUI action correctly and explain its outcome. The focus is state-aware, instruction-grounded criticism—not action generation.",
+      "sections": [
+        [
+          "What is being evaluated?",
+          "<p>Each example pairs a hierarchical instruction (goal, subtask and atomic action) with action code, before-and-after screenshots and an action video. The critic predicts success or failure and gives a reason.</p><p>The unit is the current atomic instruction. Selecting a text box can be correct even when the overall editing task remains unfinished. A useful critic must understand that granularity and the change between states.</p>"
+        ],
+        [
+          "How the data is collected",
+          "<p>The FYP describes two collection modes: autonomous agent exploration, and exploration guided by a plan refined by humans. Interactions are recorded, segmented into semantic atomic actions, and aligned with screenshots and video clips.</p><p>MLLM-assisted annotation is followed by human checks of instructions, media alignment, success/failure labels and reasons. Atomic instructions are grounded in the original goal and pre-action state, so a wrong action does not redefine the target. Cleaning removes redundant or invalid examples.</p><p>The resulting thesis dataset contains <strong>540 examples from 56 tasks</strong>: 266 successful and 274 failed actions, spanning Acrobat, PowerPoint, Word, Windows Settings and web tasks. The pipeline also includes a human-demonstration entry point, as illustrated above.</p>"
+        ],
+        [
+          "What the experiment found",
+          "<p>The thesis reports the following GPT-4o results under its dataset and evaluation protocol:</p><div class=\"article-table\"><table><thead><tr><th>Metric</th><th>Reported result</th></tr></thead><tbody><tr><td>Accuracy</td><td>73.3%</td></tr><tr><td>Balanced accuracy</td><td>73.9%</td></tr><tr><td>True positive rate</td><td>84.9%</td></tr><tr><td>True negative rate</td><td>63.0%</td></tr></tbody></table></div><p>Recognizing failures was harder than recognizing successes. Error analysis highlights overreliance on the final screenshot, missed state changes and confusion between atomic progress and full-task completion.</p>"
+        ],
+        [
+          "What remains open",
+          "<p>This is a compact, offline benchmark with an initial GPT-4o evaluation. It does not establish performance across current models or prove that a critic improves an online agent.</p><p>BERTScore is proposed for comparing explanations, but the reported classification table does not establish explanation faithfulness. Broader model coverage and direct checks of whether reasons match the visual evidence remain important next steps.</p>"
+        ]
+      ],
+      "sources": "Kaiming Yang, FYP Report, Chapter 5 (CriticGUI data and evaluation design), Tables 5.2 and 6.4, and Section 6.3 (critic evaluation and error analysis)."
+    },
+    "zh": {
+      "subtitle": "多模态 LLM 能否成为 GUI 智能体可靠的 Critic？",
+      "lead": "CriticGUI 评估多模态 LLM 能否正确判断 GUI 动作的结果，并解释原因。核心是以状态感知与指令理解为依据的 Critic 能力，而非动作生成。",
+      "sections": [
+        [
+          "评估什么",
+          "<p>每条样本包含分层指令（目标、子任务、原子动作）、动作代码、前后截图和操作视频。Critic 输出成功或失败标签，并解释判断原因。</p><p>评估单位是当前原子指令。即使整项编辑任务没有结束，“选中文本框”也可能是正确操作。模型需要理解这种粒度，并比较动作前后的状态变化。</p>"
+        ],
+        [
+          "数据如何采集",
+          "<p>FYP 描述了两种模式：智能体自主探索，以及由人工修订计划引导的探索。交互被记录后，切分为语义完整的原子动作，并与截图和视频片段对齐。</p><p>MLLM 辅助标注后，人工检查指令、媒体对齐、成败标签与解释。原子指令依据原始目标和动作前状态确定，避免用错误操作反过来定义目标；最后清除重复或无效样本。</p><p>论文数据集包含 <strong>56 个任务、540 条样本</strong>，其中成功 266 条、失败 274 条，覆盖 Acrobat、PowerPoint、Word、Windows Settings 与网页任务。流程图中也包含人工示范这一采集入口。</p>"
+        ],
+        [
+          "实验发现",
+          "<p>FYP 中 GPT-4o 在该数据集与协议下的结果如下：</p><div class=\"article-table\"><table><thead><tr><th>指标</th><th>报告结果</th></tr></thead><tbody><tr><td>Accuracy</td><td>73.3%</td></tr><tr><td>Balanced accuracy</td><td>73.9%</td></tr><tr><td>True positive rate</td><td>84.9%</td></tr><tr><td>True negative rate</td><td>63.0%</td></tr></tbody></table></div><p>识别失败比识别成功更困难。错误分析发现，模型容易过度依赖最终截图、遗漏状态变化，以及混淆原子步骤进展与整项任务完成。</p>"
+        ],
+        [
+          "还有哪些边界",
+          "<p>这是一个小规模离线基准，初步实验以 GPT-4o 为中心，不能直接代表当前所有模型，也不能证明接入 Critic 就会提升在线智能体的成功率。</p><p>论文提出用 BERTScore 比较解释，但分类结果表并不能证明解释忠实于事实。扩大模型覆盖，并直接核验原因是否符合视觉证据，是后续需要补充的部分。</p>"
+        ]
+      ],
+      "sources": "杨铠铭，FYP Report，第 5 章（CriticGUI 数据与评估设计）、表 5.2、表 6.4，以及第 6.3 节（Critic 评测与错误分析）。"
+    }
+  }
+}

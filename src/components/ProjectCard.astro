@@ -1,0 +1,24 @@
+---
+import Icon from './ProfileIcon.astro';
+import {copy,type Lang,type Project} from '../data/portfolio';
+const {project:p,lang}=Astro.props as {project:Project,lang:Lang};
+const t=copy[lang];const base=lang==='en'?'/':'/zh/';
+const figures:Record<string,{src:string;alt:string}>={dream:{src:'/images/dream-teaser.png',alt:'Dream.exe teaser showing robot manipulation benchmark demonstrations'},adahc:{src:'/images/adahc-overview.png',alt:'AdaHC overview: CDT constructor, planner and executor'},libra:{src:'/images/libra-overview.png',alt:'Libra overview: sequence placement, tiled attention pool and executor'},nl2spec:{src:'/images/nl2spec-cover-v2.png',alt:'nl2spec++ cross-sentence reasoning with two alternative routes to candidate LTL specifications'},worldgui:{src:'/images/worldgui-benchmark.png',alt:'WorldGUI benchmark overview'},criticgui:{src:'/images/criticgui-overview.png',alt:'CriticGUI benchmark overview and data collection pipeline'}};
+const figure=figures[p.id];
+---
+<article id={p.id} class="project-card">
+  {figure?<div class="project-figures"><button type="button" class="project-image supplied-image" data-figure-src={figure.src} data-figure-alt={figure.alt} data-figure-title={p.name} aria-haspopup="dialog" aria-label={lang==='en'?`Open ${p.name} figure at full resolution`:`打开 ${p.name} 高清图`}><img src={figure.src} alt={figure.alt} loading="lazy"/><span class="figure-open">{p.id==='worldgui'?'Benchmark overview':lang==='en'?'View full figure':'查看高清图'} ⤢</span></button>{p.id==='dream'&&<button type="button" class="project-image supplied-image" data-figure-src="/images/dream-overview.png" data-figure-alt="Dream.exe benchmark overview: task levels and benchmark distributions" data-figure-title="Dream.exe · Benchmark overview" aria-haspopup="dialog" aria-label={lang==='en'?'Open Dream.exe benchmark overview':'放大 Dream.exe benchmark overview'}><img src="/images/dream-overview.png" alt="Dream.exe benchmark overview" loading="lazy"/><span class="figure-open">Benchmark overview ⤢</span></button>}{p.id==='worldgui'&&<button type="button" class="project-image supplied-image" data-figure-src="/images/worldgui-framework.png" data-figure-alt="WorldGUI agent framework" data-figure-title="WorldGUI · Agent framework" aria-haspopup="dialog" aria-label={lang==='en'?'Open WorldGUI agent framework':'放大 WorldGUI agent framework'}><img src="/images/worldgui-framework.png" alt="WorldGUI agent framework" loading="lazy"/><span class="figure-open">Agent framework ⤢</span></button>}</div>:<>  <div class={`project-image ${p.id}`} aria-label={t.figure}>
+    <div class="placeholder-symbol" aria-hidden="true">{({dream:'↗',worldgui:'⌘',criticgui:'◎',nl2spec:'{ }',adahc:'≋',libra:'⇄'})[p.id]}</div>
+    <span class="placeholder-name">{p.name}</span><span class="image-note">{t.figure}</span>
+  </div></>}
+
+  <div class="project-body">
+    <div class="project-badges"><span class={`badge ${p.type}`}>{p.type==='publication'?t.paper:t.project}</span>{p.venue&&<span class="venue">{p.venue}{p.spotlight&&<> · <strong class="spotlight">Spotlight</strong></>}</span>}</div>
+    <h3>{p.name}</h3><h4>{p.title}</h4>
+    {p.authors&&<p class="authors">{p.authors.split('Kaiming Yang').map((part,i)=><>{i>0&&<strong>Kaiming Yang</strong>}{part}</>)}</p>}
+    {p.authors.includes("*")&&<p class="author-note">{lang==='en'?'* Equal contribution':'* 同等贡献（共同第一作者）'}</p>}
+    <div class="topics project-topics" aria-label={lang==='en'?'Research topics':'研究方向'}>{p.tags.map(tag=><span><Icon name={tag.includes('Generation')?'camera':tag.includes('Systems')||tag.includes('Logic')?'code':tag.includes('Spatial')||tag.includes('Physical')?'space':'agent'}/>{tag}</span>)}</div>
+    <p class="project-description">{p.description[lang]}</p>
+    <div class="project-actions">{p.links.map(l=><a class="small-pill" href={l.url} target="_blank" rel="noreferrer">{l.label} ↗</a>)}{p.blog&&<a class="small-pill blog-link" href={`${base}blog/${p.blog}/`}>{t.blog} ↗</a>}</div>
+  </div>
+</article>
