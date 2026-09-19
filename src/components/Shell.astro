@@ -10,6 +10,18 @@ const t=copy[lang];
 <main id="main"><slot/></main><footer><span>© 2026 Kaiming Yang</span><span>{t.footer}</span><a href="mailto:ykaiming@u.nus.edu">ykaiming@u.nus.edu ↗</a></footer>
 <dialog class="figure-dialog" aria-labelledby="figure-title"><div class="figure-toolbar"><h2 id="figure-title"></h2><button type="button" class="figure-close" aria-label={lang==='en'?'Close image':'关闭图片'} autofocus><span aria-hidden="true">×</span></button></div><div class="figure-view"><img class="figure-full" alt=""/></div></dialog>
 <script>
+const portraitButton=document.querySelector<HTMLButtonElement>('.portrait-toggle');
+if(portraitButton){
+ const portrait=portraitButton.querySelector<HTMLImageElement>('img')!;
+ const original=portrait.getAttribute('src')!;
+ const alternate='/images/portrait-alternate.jpg';
+ const preload=new Image();preload.src=alternate;
+ const restore=()=>{portrait.src=original;portraitButton.setAttribute('aria-pressed','false')};
+ portraitButton.addEventListener('click',()=>{const active=portraitButton.getAttribute('aria-pressed')==='true';portrait.src=active?original:alternate;portraitButton.setAttribute('aria-pressed',String(!active))});
+ portraitButton.addEventListener('pointerleave',event=>{if(event.pointerType!=='touch')restore()});
+ portraitButton.addEventListener('blur',restore);
+ portraitButton.addEventListener('keydown',event=>{if(event.key==='Escape')restore()});
+}
 const dialog=document.querySelector<HTMLDialogElement>('.figure-dialog')!;
 const fullImage=dialog.querySelector<HTMLImageElement>('.figure-full')!;
 let figureTrigger:HTMLButtonElement|null=null;
