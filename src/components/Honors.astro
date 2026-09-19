@@ -1,0 +1,11 @@
+---
+const {lang}=Astro.props;
+const en=lang==='en';
+const honors=[
+ {year:'2024',title:en?'First-Class Scholarship, Xidian University':'西安电子科技大学校级一等奖学金'},
+ {year:'2024',title:en?'Finalist, Mathematical Contest in Modeling (MCM)':'美国大学生数学建模竞赛（MCM）特等奖提名（Finalist）',url:'https://www.comap-math.org/mcm/2024Certs/2426113.pdf'},
+ {year:'2023',title:en?'Second-Class Scholarship, Xidian University':'西安电子科技大学校级二等奖学金'},
+ {year:'2023',title:en?'Patent application: Atomicity Violation Detection for Interrupt-Driven Programs':'发明专利申请：一种面向中断驱动程序的原子性违反缺陷检测方法及装置',url:'https://patents.google.com/patent/CN117312137A/'+(en?'en':'zh'),note:'CN117312137A'},
+];
+---
+<section id="honors" class="section honors-section"><div class="section-title"><h2>{en?'Honors & Patents':'荣誉与专利'}</h2><span>05</span></div><ul class="honors-list">{honors.map(item=><li><time>{item.year}</time><div>{item.url?<a href={item.url} target="_blank" rel="noopener noreferrer">{item.title}<span class="honor-arrow" aria-hidden="true"> ↗</span></a>:<span>{item.title}</span>}{item.note&&<small>{item.note}</small>}</div></li>)}</ul></section>

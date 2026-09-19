@@ -1,6 +1,7 @@
 ---
 import Shell from './Shell.astro';
 import PersonalNote from './PersonalNote.astro';
+import Honors from './Honors.astro';
 import ProjectCard from './ProjectCard.astro';
 import Icon from './ProfileIcon.astro';
 import {copy,projects,collaborations,type Lang} from '../data/portfolio';
@@ -17,6 +18,7 @@ const {lang='en'}=Astro.props as {lang:Lang}; const t=copy[lang]; const base=lan
 <section id="experience" class="section"><div class="section-title"><h2>{t.experience}</h2><span>02</span></div><div class="experience-list"><article class="experience-row"><div class="company-logo"><img src="/logos/huawei.png" width="133" height="30" alt="Huawei"/></div><div><div class="experience-heading"><h3>{t.huaweiOrg}</h3><time>2026.06 — {t.present}</time></div><p class="job-department">{t.huaweiDept}</p><p class="job-role">Research Intern</p><p class="job-description">{t.huaweiText}</p><div class="topics"><span><Icon name="camera"/>Camera Control</span><span><Icon name="space"/>Geometry-aware World Models</span><span><Icon name="agent"/>Agentic World Models</span></div></div></article><article class="experience-row"><div class="company-logo"><img src="/logos/yonyou.png" width="61" height="40" alt="Yonyou 用友"/></div><div><div class="experience-heading"><h3>{t.yonyouOrg}</h3><time>2023.07 — 2023.08</time></div><p class="job-department">{t.yonyouDept}</p><p class="job-role">{t.yonyouRole}</p><p class="job-description">{t.yonyouText}</p><div class="topics"><span><Icon name="code"/>Software Engineering</span><span><Icon name="chart"/>Data Visualization</span><span><Icon name="dashboard"/>BI Dashboards</span></div></div></article></div></section>
 <section id="work" class="section"><div class="section-title"><h2>{t.work}</h2><span>03</span></div><div class="projects">{projects.map(p=><ProjectCard project={p} lang={lang}/>)}</div></section>
 <section id="collaborations" class="section"><div class="section-title"><h2>{t.other}</h2><span>04</span></div>{t.otherEn&&<p class="section-intro">{t.otherEn}</p>}<div class="projects">{collaborations.map(p=><ProjectCard project={p} lang={lang}/>)}</div></section>
+<Honors lang={lang}/>
 <PersonalNote lang={lang}/>
 </div></div>
 </Shell>
