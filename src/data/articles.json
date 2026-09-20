@@ -85,6 +85,14 @@
           "<p>Each sample aligns one atomic instruction with its action code, before/after screenshots and a matching video clip. The illustrated sample checks whether “GUICritic” was entered into a signature field. Its label and explanation refer to that local result, not the completion of the full signature workflow.</p>"
         ],
         [
+          "Why add human demonstrations?",
+          "<p>Agent exploration is a useful source of natural successes and failures, but it inherits the capabilities of the executing MLLM. On a hard task, the agent may fail before reaching the very state we want a critic to assess. Collecting only what that agent can execute therefore narrows the task distribution and can couple the evaluation too closely to the collection model.</p><p><strong>Human demonstrations extend the states and interactions the benchmark can cover.</strong> A person can complete difficult procedures, expose subtle intermediate changes, and introduce controlled mistakes. The two sources complement each other: agent exploration provides naturally occurring behavior, while human collection makes difficult cases accessible and repeatable. The agent branch follows <a href=\"https://github.com/showlab/WorldGUI\">WorldGUI</a>; the <a href=\"https://github.com/Kaiming-Y/CriticGUI\">CriticGUI repository</a> provides the human-demonstration toolkit.</p>"
+        ],
+        [
+          "From a reviewed plan to critic examples",
+          "<ol><li><strong>Draft the plan.</strong> An MLLM proposes a procedure from the user query and initial screen, optionally using a tutorial video or transcript.</li><li><strong>Refine and freeze it.</strong> A human corrects the workflow and splits non-atomic operations. The plan has three levels: <strong>high-level milestone → low-level subtask → atomic interaction</strong>. Only the reviewed version is treated as the ground-truth plan.</li><li><strong>Record one atomic interaction at a time.</strong> The demonstrator sees all three levels, executes the finest instruction, and records the input events and visual evidence. An atomic interaction can contain multiple physical key presses or mouse events.</li><li><strong>Create controlled negative cases.</strong> Restore the relevant starting state, deliberately change the execution, and record a separate variant under the same intended instruction. Document the deviation rather than simply relabeling the successful recording.</li><li><strong>Review the evidence.</strong> Judge the observed outcome, explain it, and retain the plan, action representation, screenshots and video together. An attempted negative is not automatically a failure: the label must follow what actually happened.</li></ol><p>The released tool validates plan structure, supports step-wise recording and separate variants, and exports human-reviewed examples. Plan correction, state restoration and perturbation remain human decisions.</p>"
+        ],
+        [
           "From action logs to aligned examples",
           "<p>The atomic-action parser removes irrelevant statements, tokenizes the action code, and scans it against predefined action patterns. Matching tokens are grouped into semantic actions; unmatched tokens use a single-token fallback. The resulting segments provide boundaries for aligning screenshots and video.</p><p>Data comes from autonomous exploration and human-guided collection, followed by model-assisted annotation, human checks and cleaning. Instructions must reflect the intended goal and pre-action state, so an incorrect execution does not redefine success.</p>"
         ],
@@ -118,6 +126,14 @@
         [
           "围绕一个原子动作构建样本",
           "<p>每条样本将一个原子指令与对应代码、前后截图和视频片段对齐。图中样本检查是否在签名输入框中输入了“GUICritic”，标签和解释针对这一局部结果，而不是整个签名流程是否完成。</p>"
+        ],
+        [
+          "为什么引入 Human Demonstration？",
+          "<p>Agent 探索能够提供自然发生的成功与失败，但也受到执行它的 MLLM 能力限制。面对困难任务，agent 可能还没有到达我们希望评估的关键状态，就已经执行失败。只收集它能够完成的过程，会限制任务的多样性与复杂性，也容易让评估过度贴近数据采集模型自身的行为范围。</p><p><strong>人工演示用来扩展这些难以覆盖的状态和交互。</strong> 人可以完成复杂流程、保留细微的中间状态变化，并引入可控错误。两种来源相互补充：agent 探索提供自然行为，人工采集让困难案例更容易到达和复现。Agent 部分参考 <a href=\"https://github.com/showlab/WorldGUI\">WorldGUI</a>，人工演示工具整理在 <a href=\"https://github.com/Kaiming-Y/CriticGUI\">CriticGUI 仓库</a>。"
+        ],
+        [
+          "从人工校正的计划到 Critic 样本",
+          "<ol><li><strong>生成计划草稿。</strong> MLLM 根据用户 query 和初始界面提出操作流程，也可以结合教程视频或转写文本。</li><li><strong>人工修订并固定计划。</strong> 修正操作顺序与界面细节，拆分非原子操作，保持<strong>高层目标 → 低层子任务 → 原子交互</strong>三层结构。人工审核后的版本才作为 ground-truth plan。</li><li><strong>逐条执行与录制。</strong> 演示者同时看到三层上下文，按最细的 atomic instruction 执行，保存输入事件与视觉证据。一个语义上的原子交互可以包含多次物理按键或鼠标事件。</li><li><strong>构造受控负例。</strong> 恢复对应的起始状态，在同一条目标指令下人为改变执行方式，单独录制扰动版本并记录偏差，而不是直接给成功录像换一个标签。</li><li><strong>审核判断与原因。</strong> 根据实际结果标注成功或失败，并将解释、计划、动作表示、截图与视频一起保存。试图制造错误不代表一定失败，标签应以观察到的结果为准。</li></ol><p>发布的工具负责计划结构校验、分步骤录制、独立变体与已审核样本导出；计划校正、状态恢复和扰动设计仍由人完成。</p>"
         ],
         [
           "从动作日志到对齐的样本",

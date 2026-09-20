@@ -72,7 +72,7 @@ export const projects:Project[]=[
       "zh": "多模态大模型能否成为可靠的 GUI Critic？CriticGUI 关注模型对界面状态与变化的理解，能否结合分层指令、动作代码、前后截图及操作视频，判断当前步骤是否达成目标，并解释成功或失败的原因。基准将 Critic 的判断与解释能力独立于动作生成进行评估，考察反馈是否真正建立在状态感知与指令理解之上。",
       "en": "Can a multimodal LLM serve as a reliable critic for GUI agents? CriticGUI evaluates whether models can understand interface states and transitions, judge whether an action fulfills the current instruction, and explain why it succeeds or fails. Using hierarchical instructions, action code, before-and-after screenshots and action videos, the benchmark assesses critic judgments and explanations independently of action generation, focusing on state-aware, instruction-grounded multimodal understanding."
     },
-    "links": [],
+    "links": [{"label": "Code", "url": "https://github.com/Kaiming-Y/CriticGUI"}],
     "blog": "criticgui",
     "tags": [
       "Multimodal Understanding",
