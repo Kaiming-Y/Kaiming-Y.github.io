@@ -29,7 +29,7 @@
           "<p>The useful connection here is between flexible language understanding and explicit, inspectable constraints. An LLM can propose the hidden relationship; formal tools can then help test whether that proposal is justified. A next step would be an entailment check that searches for a counterexample to the candidate formula, alongside a benchmark that separates translation errors from reasoning errors.</p><p>This is the distinction I want the project to make visible: producing a specification is the beginning of validation, not its completion.</p>"
         ]
       ],
-      "sources": "<a href=\"https://github.com/Kaiming-Y/nl2spec_plus\">Repository & README</a> · <a href=\"https://github.com/Kaiming-Y/nl2spec_plus/blob/main/src/backend.py\">Method routing</a> · <a href=\"https://github.com/Kaiming-Y/nl2spec_plus/tree/main/src/translation\">Translation implementation</a> · <a href=\"https://github.com/realChrisHahn2/nl2spec\">Original nl2spec</a>"
+      "sources": "This project was supervised by <a href=\"https://faculty.xidian.edu.cn/YUBIN/zh_CN/index.htm\">Prof. Bin Yu</a> at the <a href=\"http://ictt.xidian.edu.cn/\">Institute of Computing Theory and Technology (ICTT), Xidian University</a>."
     },
     "zh": {
       "subtitle": "从两句话中，找到没有被直接说出的时序关系",
@@ -60,7 +60,7 @@
           "<p>这个方向连接了灵活的语言理解与明确、可检查的约束。LLM 可以提出候选关系，形式化工具则可以检查它是否成立。下一步可以加入蕴含检查，寻找违反候选公式的反例，并通过基准分别分析翻译错误与推理错误。</p><p>生成规约是验证的起点，而不是验证的完成。</p>"
         ]
       ],
-      "sources": "<a href=\"https://github.com/Kaiming-Y/nl2spec_plus\">仓库与 README</a> · <a href=\"https://github.com/Kaiming-Y/nl2spec_plus/blob/main/src/backend.py\">流程实现</a> · <a href=\"https://github.com/Kaiming-Y/nl2spec_plus/tree/main/src/translation\">翻译模块</a> · <a href=\"https://github.com/realChrisHahn2/nl2spec\">原始 nl2spec</a>"
+      "sources": "本项目在西安电子科技大学<a href=\"http://ictt.xidian.edu.cn/\">计算理论与技术研究所（ICTT）</a>开展，由<a href=\"https://faculty.xidian.edu.cn/YUBIN/zh_CN/index.htm\">于斌副教授</a>指导。"
     }
   },
   "criticgui": {
@@ -74,11 +74,11 @@
         ],
         [
           "What exactly is being judged?",
-          "<p>The critic receives the instruction hierarchy, action code and visual evidence. It returns a success/failure label and an explanation. A semantic atomic action may contain several physical inputs; it is not necessarily a single click.</p><div class=\"instruction-levels\"><div><span>01 / Goal</span><p>Add a watermark saying “Draft”.</p></div><div><span>02 / Subtask</span><p>Enter “Draft” and apply the watermark.</p></div><div><span>03 / Atomic action</span><p>Focus the watermark text field.</p></div></div><p><strong>Judge the current instruction.</strong> Focusing the field can be successful even though the watermark has not yet been created.</p>"
+          "<p>The critic receives the instruction hierarchy, action code and visual evidence. It returns a success/failure label and an explanation. A semantic atomic action may contain several physical inputs; it is not necessarily a single click.</p><div class=\"instruction-levels\"><div><span>01 / Goal</span><p>Add a watermark saying “Draft”.</p></div><div><span>02 / Subtask</span><p>Enter “Draft” and apply the watermark.</p></div><div><span>03 / Atomic action</span><p>Focus the watermark text field.</p></div></div><p><strong>Judge the current instruction.</strong> Focusing the field can be successful even though the watermark has not yet been created.</p><p><strong>Progress and completion are different questions.</strong> Focusing the field may complete the atomic instruction while leaving the watermark subtask unfinished. The evaluation must name the level being judged. In my notes, separating <em>helpful</em> from <em>complete</em> became a design question—not an additional validated metric in the results below.</p>"
         ],
         [
-          "A hard case: the clue is small",
-          "<p>In this example, the goal is to add a link to a word, while the current instruction is to select the link-editing tool. Much of the document looks unchanged. The judgment depends on small interface cues highlighted in the example; a coarse view of the final screen can miss them.</p>"
+          "What annotation revealed",
+          "<p>Annotating trajectories exposed three ways a seemingly plausible judgment can miss the actual task.</p><h3>Small changes can carry the decisive evidence</h3><p>Selecting the link-editing tool may leave most of the document unchanged. Tool mode, cursor appearance and local interface cues matter more than the overall visual similarity of the two screens.</p><h3>A correct label can come with the wrong reason</h3><p>In my link-region annotation notes, a failed selection was attributed to incomplete coverage of the target text. The model also predicted failure, but argued that no rectangle was visible in the final screenshot—even though the interface had already opened the Create Link dialog. The label agreed with the annotation, while the explanation relied on a different reading of the evidence. The drawing process matters here: its geometry may no longer be visible in the final screenshot.</p><p><strong>Label agreement alone does not establish a faithful explanation.</strong> This is a qualitative annotation finding, not a separate quantitative explanation evaluation.</p><h3>A completed operation can violate the user’s goal</h3><p>Another task asked the agent to reorder PDF pages. The interface had instead reached a deletion confirmation. Clicking OK successfully deleted a page, reducing the page count from three to two, but moved away from the user’s goal. The appropriate response was to cancel the mistaken operation. A critic must detect this conflict rather than treating local execution success as task success.</p>"
         ],
         [
           "Build a sample around one atomic action",
@@ -86,15 +86,15 @@
         ],
         [
           "Why add human demonstrations?",
-          "<p>Agent exploration is a useful source of natural successes and failures, but it inherits the capabilities of the executing MLLM. On a hard task, the agent may fail before reaching the very state we want a critic to assess. Collecting only what that agent can execute therefore narrows the task distribution and can couple the evaluation too closely to the collection model.</p><p><strong>Human demonstrations extend the states and interactions the benchmark can cover.</strong> A person can complete difficult procedures, expose subtle intermediate changes, and introduce controlled mistakes. The two sources complement each other: agent exploration provides naturally occurring behavior, while human collection makes difficult cases accessible and repeatable. The agent branch follows <a href=\"https://github.com/showlab/WorldGUI\">WorldGUI</a>; the <a href=\"https://github.com/Kaiming-Y/CriticGUI\">CriticGUI repository</a> provides the human-demonstration toolkit.</p>"
+          "<p>Agent exploration is a useful source of natural successes and failures, but it inherits the capabilities of the executing MLLM. On a hard task, the agent may fail before reaching the very state we want a critic to assess. Collecting only what that agent can execute therefore narrows the task distribution and can couple the evaluation too closely to the collection model.</p><p><strong>Human demonstrations extend the states and interactions the benchmark can cover.</strong> A person can complete difficult procedures, expose subtle intermediate changes, and introduce controlled mistakes. The two sources complement each other: agent exploration provides naturally occurring behavior, while human collection makes difficult cases accessible and repeatable. The agent branch follows <a href=\"https://github.com/showlab/WorldGUI\">WorldGUI</a>; the <a href=\"https://github.com/Kaiming-Y/CriticGUI\">CriticGUI repository</a> provides the human-demonstration toolkit.</p><p>The difficulty of <strong>executing an action</strong> is not the same as the difficulty of <strong>judging its outcome</strong>. Agent collection can stall at one state and produce repeated, weakly related samples. Human demonstrations help reach later states and construct subtle contrasts, including interactions that are easy to perform but hard to evaluate.</p>"
         ],
         [
           "From a reviewed plan to critic examples",
           "<ol><li><strong>Draft the plan.</strong> An MLLM proposes a procedure from the user query and initial screen, optionally using a tutorial video or transcript.</li><li><strong>Refine and freeze it.</strong> A human corrects the workflow and splits non-atomic operations. The plan has three levels: <strong>high-level milestone → low-level subtask → atomic interaction</strong>. Only the reviewed version is treated as the ground-truth plan.</li><li><strong>Record one atomic interaction at a time.</strong> The demonstrator sees all three levels, executes the finest instruction, and records the input events and visual evidence. An atomic interaction can contain multiple physical key presses or mouse events.</li><li><strong>Create controlled negative cases.</strong> Restore the relevant starting state, deliberately change the execution, and record a separate variant under the same intended instruction. Document the deviation rather than simply relabeling the successful recording.</li><li><strong>Review the evidence.</strong> Judge the observed outcome, explain it, and retain the plan, action representation, screenshots and video together. An attempted negative is not automatically a failure: the label must follow what actually happened.</li></ol><p>The released tool validates plan structure, supports step-wise recording and separate variants, and exports human-reviewed examples. Plan correction, state restoration and perturbation remain human decisions.</p>"
         ],
         [
-          "From action logs to aligned examples",
-          "<p>The atomic-action parser removes irrelevant statements, tokenizes the action code, and scans it against predefined action patterns. Matching tokens are grouped into semantic actions; unmatched tokens use a single-token fallback. The resulting segments provide boundaries for aligning screenshots and video.</p><p>Data comes from autonomous exploration and human-guided collection, followed by model-assisted annotation, human checks and cleaning. Instructions must reflect the intended goal and pre-action state, so an incorrect execution does not redefine success.</p>"
+          "Designing informative contrasts",
+          "<p>My construction notes explored two main places to introduce difficulty. These are research design options; the released recorder supports separate attempts and human review, rather than automatically generating every augmentation.</p><div class=\"article-table\"><table><thead><tr><th>What changes?</th><th>Example</th><th>What must the critic understand?</th></tr></thead><tbody><tr><td>Starting state</td><td>A prerequisite is missing, the step is partly done, or the goal is already satisfied.</td><td>Whether the action is appropriate or needed in this state.</td></tr><tr><td>Action or outcome</td><td>A nearby wrong target, incomplete text selection, or imprecise placement.</td><td>Whether the result actually meets the instruction.</td></tr><tr><td>Instruction–action pairing</td><td>Re-pair neighboring steps with different instructions.</td><td>Whether the evidence matches the intended step; labels require review.</td></tr></tbody></table></div><p>State is relative to the instruction: an unchanged screen can mean an ineffective action, an already-completed task, or a subtle change missed by the observation. Repetition and re-pairing do not automatically produce negatives.</p><p><strong>Recovery starts from the state reached after the error.</strong> Copying the original correct action is only appropriate when its preconditions still hold. Likewise, an atomic interaction is a semantic unit: a drag may contain move, press, move and release events.</p>"
         ],
         [
           "What the experiment found",
@@ -102,7 +102,7 @@
         ],
         [
           "What remains open",
-          "<p>This is a compact, offline benchmark with an initial GPT-4o evaluation. It does not establish performance across current models or prove that a critic improves an online agent.</p><p>BERTScore is proposed for comparing explanations, but the reported classification table does not establish explanation faithfulness. Broader model coverage and direct checks of whether reasons match the visual evidence remain important next steps.</p>"
+          "<p>This is a compact, offline benchmark with an initial GPT-4o evaluation. It does not establish performance across current models or prove that a critic improves an online agent.</p><p>BERTScore is proposed for comparing explanations, but the reported classification table does not establish explanation faithfulness. Broader model coverage and direct checks of whether reasons match the visual evidence remain important next steps.</p><h3>How the design evolved</h3><p>Early notes tried to divide the plan around screen updates. I later separated the concerns: the plan should preserve semantic goals and subtasks, while execution decides when to observe the interface again. A fixed plan cannot replace state-aware execution.</p><p>I also explored a unified step-check/action-critic model, iterative self-correction and video-based atomic-action recognition. These remain research directions in the notes, not trained models or demonstrated online improvements reported here.</p>"
         ]
       ],
       "sources": "This was my undergraduate final-year project, completed at <a href=\"https://en.nusricq.cn/\" target=\"_blank\" rel=\"noopener noreferrer\">NUS (Chongqing) Research Institute (NUSRI-CQ)</a>."
@@ -117,11 +117,11 @@
         ],
         [
           "到底评判哪一级动作？",
-          "<p>Critic 接收分层指令、动作代码和视觉证据，输出成败标签及原因。一个语义原子动作可以包含多个物理操作，并不一定等于一次点击。</p><div class=\"instruction-levels\"><div><span>01 / 目标</span><p>添加内容为“Draft”的水印。</p></div><div><span>02 / 子任务</span><p>输入“Draft”并应用水印。</p></div><div><span>03 / 原子动作</span><p>将焦点放到水印文本输入框。</p></div></div><p><strong>判断当前指令，而不是整项任务。</strong> 即使水印尚未生成，成功选中输入框也意味着当前步骤完成。</p>"
+          "<p>Critic 接收分层指令、动作代码和视觉证据，输出成败标签及原因。一个语义原子动作可以包含多个物理操作，并不一定等于一次点击。</p><div class=\"instruction-levels\"><div><span>01 / 目标</span><p>添加内容为“Draft”的水印。</p></div><div><span>02 / 子任务</span><p>输入“Draft”并应用水印。</p></div><div><span>03 / 原子动作</span><p>将焦点放到水印文本输入框。</p></div></div><p><strong>判断当前指令，而不是整项任务。</strong> 即使水印尚未生成，成功选中输入框也意味着当前步骤完成。</p><p><strong>有推进与已完成，是两个问题。</strong> 聚焦输入框可以完成当前原子指令，但水印子任务仍未完成。评估必须明确判断哪一层目标。笔记中，我进一步考虑将 <em>helpful</em> 与 <em>complete</em> 分开；这属于标签设计上的探索，不是下文结果已经验证的新增指标。</p>"
         ],
         [
-          "困难案例：决定成败的细小线索",
-          "<p>这个案例的总目标是给一个词添加链接，当前指令却只是选择链接编辑工具。文档主体几乎没有变化，判断依赖图中标出的局部界面线索；只粗略查看最终截图，很容易遗漏关键证据。</p>"
+          "标注过程中发现了什么",
+          "<p>逐条标注轨迹后，我发现一些看似合理的判断，仍然可能没有理解真正的任务。</p><h3>细微变化可能是决定性证据</h3><p>选择链接编辑工具时，文档主体可能几乎不变。工具模式、指针形态和局部界面线索，比前后两张图整体上是否相似更重要。</p><h3>标签判对了，原因仍然可能错</h3><p>在链接框选的标注笔记中，我将失败归因于没有完整覆盖目标文字。模型也判断失败，但理由是最终截图里看不到矩形——此时界面实际上已经打开了 Create Link 对话框。标签与标注一致，解释却依据了另一种对证据的理解。框选过程中的几何信息，未必还保留在最终截图中。</p><p><strong>标签一致，不代表解释忠实于实际过程。</strong> 这是标注中的定性发现，并非单独完成的解释质量量化评测。</p><h3>操作执行成功，也可能违背用户目标</h3><p>另一个任务要求调整 PDF 页面的顺序，界面却进入了删除确认框。点击 OK 确实成功删除了一页，页数从三页变为两页，但偏离了用户目标。此时应该取消错误操作。Critic 需要识别这种冲突，不能把局部操作执行成功当成任务成功。</p>"
         ],
         [
           "围绕一个原子动作构建样本",
@@ -129,15 +129,15 @@
         ],
         [
           "为什么引入 Human Demonstration？",
-          "<p>Agent 探索能够提供自然发生的成功与失败，但也受到执行它的 MLLM 能力限制。面对困难任务，agent 可能还没有到达我们希望评估的关键状态，就已经执行失败。只收集它能够完成的过程，会限制任务的多样性与复杂性，也容易让评估过度贴近数据采集模型自身的行为范围。</p><p><strong>人工演示用来扩展这些难以覆盖的状态和交互。</strong> 人可以完成复杂流程、保留细微的中间状态变化，并引入可控错误。两种来源相互补充：agent 探索提供自然行为，人工采集让困难案例更容易到达和复现。Agent 部分参考 <a href=\"https://github.com/showlab/WorldGUI\">WorldGUI</a>，人工演示工具整理在 <a href=\"https://github.com/Kaiming-Y/CriticGUI\">CriticGUI 仓库</a>。"
+          "<p>Agent 探索能够提供自然发生的成功与失败，但也受到执行它的 MLLM 能力限制。面对困难任务，agent 可能还没有到达我们希望评估的关键状态，就已经执行失败。只收集它能够完成的过程，会限制任务的多样性与复杂性，也容易让评估过度贴近数据采集模型自身的行为范围。</p><p><strong>人工演示用来扩展这些难以覆盖的状态和交互。</strong> 人可以完成复杂流程、保留细微的中间状态变化，并引入可控错误。两种来源相互补充：agent 探索提供自然行为，人工采集让困难案例更容易到达和复现。Agent 部分参考 <a href=\"https://github.com/showlab/WorldGUI\">WorldGUI</a>，人工演示工具整理在 <a href=\"https://github.com/Kaiming-Y/CriticGUI\">CriticGUI 仓库</a>。<p><strong>执行困难与判断困难并不是同一件事。</strong> Agent 采集可能卡在一个状态，反复产生重复或关联较弱的样本。人工演示让我们能够到达后续状态，设计细微对照，包括那些容易操作、却难以判断是否真正达标的交互。</p>"
         ],
         [
           "从人工校正的计划到 Critic 样本",
           "<ol><li><strong>生成计划草稿。</strong> MLLM 根据用户 query 和初始界面提出操作流程，也可以结合教程视频或转写文本。</li><li><strong>人工修订并固定计划。</strong> 修正操作顺序与界面细节，拆分非原子操作，保持<strong>高层目标 → 低层子任务 → 原子交互</strong>三层结构。人工审核后的版本才作为 ground-truth plan。</li><li><strong>逐条执行与录制。</strong> 演示者同时看到三层上下文，按最细的 atomic instruction 执行，保存输入事件与视觉证据。一个语义上的原子交互可以包含多次物理按键或鼠标事件。</li><li><strong>构造受控负例。</strong> 恢复对应的起始状态，在同一条目标指令下人为改变执行方式，单独录制扰动版本并记录偏差，而不是直接给成功录像换一个标签。</li><li><strong>审核判断与原因。</strong> 根据实际结果标注成功或失败，并将解释、计划、动作表示、截图与视频一起保存。试图制造错误不代表一定失败，标签应以观察到的结果为准。</li></ol><p>发布的工具负责计划结构校验、分步骤录制、独立变体与已审核样本导出；计划校正、状态恢复和扰动设计仍由人完成。</p>"
         ],
         [
-          "从动作日志到对齐的样本",
-          "<p>原子动作解析器先清理无关语句，将动作代码转成 token，再依次匹配预定义动作模式。匹配的 token 被组合为语义动作，未匹配的 token 则单独保留。这些分段为截图与视频对齐提供边界。</p><p>数据来自自主探索与人工引导采集，随后经过模型辅助标注、人工检查和清洗。指令应依据原始目标和动作前状态确定，避免用错误执行反过来定义“成功”。</p>"
+          "如何构造有信息量的对照",
+          "<p>构造笔记重点探索了在两个位置引入难度：动作前的状态，以及动作本身。以下是研究设计选项；发布的录制工具支持独立尝试与人工审核，并不自动实现全部增强方式。</p><div class=\"article-table\"><table><thead><tr><th>改变什么？</th><th>例子</th><th>检验什么？</th></tr></thead><tbody><tr><td>起始状态</td><td>前置条件未满足、步骤部分完成，或目标已经满足。</td><td>动作在当前状态下是否合适、是否必要。</td></tr><tr><td>动作或结果</td><td>点到相邻错误目标、文字未全选、放置位置偏移。</td><td>结果是否真正满足指令要求。</td></tr><tr><td>指令与动作配对</td><td>将相邻步骤与不同指令重新配对。</td><td>证据是否符合目标步骤；需重新审核标签。</td></tr></tbody></table></div><p>状态是相对于指令而言的：屏幕没变，可能是操作无效，也可能任务本来已经完成，或者观察遗漏了细微变化。重复操作和重新配对并不自动构成负例。</p><p><strong>纠错要从错误发生后的实际状态出发。</strong> 只有原动作的前置条件仍成立时，才能复用正确演示中的代码。同时，原子交互是语义单位：一次拖拽可以包含移动、按下、移动和释放等多个事件。</p>"
         ],
         [
           "实验发现",
@@ -145,7 +145,7 @@
         ],
         [
           "还有哪些边界",
-          "<p>这是一个小规模离线基准，初步实验以 GPT-4o 为中心，不能直接代表当前所有模型，也不能证明接入 Critic 就会提升在线智能体的成功率。</p><p>论文提出用 BERTScore 比较解释，但分类结果表并不能证明解释忠实于事实。扩大模型覆盖，并直接核验原因是否符合视觉证据，是后续需要补充的部分。</p>"
+          "<p>这是一个小规模离线基准，初步实验以 GPT-4o 为中心，不能直接代表当前所有模型，也不能证明接入 Critic 就会提升在线智能体的成功率。</p><p>论文提出用 BERTScore 比较解释，但分类结果表并不能证明解释忠实于事实。扩大模型覆盖，并直接核验原因是否符合视觉证据，是后续需要补充的部分。</p><h3>设计如何演变</h3><p>早期笔记尝试围绕屏幕更新来划分计划，后来我将两个问题分开：计划应保留语义上的目标和子任务，执行阶段则决定什么时候重新观察界面。固定计划不能替代对实际状态的判断。</p><p>我还探索过统一 Step Check 与 Actor Critic、多轮自我修正，以及从视频识别原子操作。这些在笔记中仍是研究方向，本文不将其写成已经训练完成的模型或验证过的在线提升。</p>"
         ]
       ],
       "sources": "这是我的本科毕业设计，在<a href=\"https://www.nusricq.cn/\" target=\"_blank\" rel=\"noopener noreferrer\">新加坡国立大学重庆研究院（NUSRI-CQ）</a>完成。"
