@@ -56,6 +56,7 @@ export const projects:Project[]=[
     ],
     "tags": [
       "Computer-use Agents",
+      "GUI Benchmark",
       "Dynamic Environments",
       "Self-reflection"
     ]
