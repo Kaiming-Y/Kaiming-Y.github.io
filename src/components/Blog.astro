@@ -6,7 +6,7 @@ import articles from '../data/articles.json';
 const {lang,slug}=Astro.props as {lang:Lang,slug:'criticgui'|'nl2spec'};
 const t=copy[lang];const p=projects.find(p=>p.blog===slug)!;const article=articles[slug][lang];
 const base=lang==='en'?'/':'/zh/';const alternate=lang==='en'?`/zh/blog/${slug}/`:`/blog/${slug}/`;
-const figure=slug==='nl2spec'?'/images/nl2spec/rebuilt/framework.png':'/images/criticgui/critic-model.png';
+const figure=slug==='nl2spec'?'/images/nl2spec/rebuilt/framework.png':'/images/criticgui-overview.png';
 ---
 <Shell lang={lang} title={`${p.name} — ${article.subtitle}`} home={base} alternate={alternate}>
 <article class="blog-page article-page">
@@ -15,7 +15,7 @@ const figure=slug==='nl2spec'?'/images/nl2spec/rebuilt/framework.png':'/images/c
 <h1>{p.name}</h1><p class="blog-subtitle">{article.subtitle}</p>
 <div class="topics">{p.tags.map(tag=><span>{tag}</span>)}</div>
 <p class="article-lead">{article.lead}</p>
-<ArticleFigure src={figure} title={slug==='nl2spec'?'nl2spec++ framework':'What does a GUI critic do?'} lang={lang} caption={lang==='en'?'Click to inspect the full diagram.':'点击查看完整流程图。'}/>
+<ArticleFigure src={figure} title={slug==='nl2spec'?'nl2spec++ framework':'CriticGUI overview: agent exploration and human demonstrations'} lang={lang} caption={lang==='en'?'Click to inspect the full diagram.':'点击查看完整流程图。'}/>
 
 <nav class="outline" aria-label={t.outline}><strong>{lang==='en'?'In this article':'本文内容'}</strong>{article.sections.map(([heading],i)=><a href={`#part-${i}`}>{String(i+1).padStart(2,'0')} / {heading}</a>)}</nav>
 {article.sections.map(([heading,body],i)=><section id={`part-${i}`} class="blog-section"><h2>{heading}</h2><div class="article-prose" set:html={body}/>{slug==='criticgui'&&i===0&&<ArticleFigure src="/images/criticgui/motivation.png" title="Why intermediate GUI states matter" lang={lang}/>}{slug==='criticgui'&&i===2&&<ArticleFigure src="/images/criticgui/hard-case.png" title="Small interface cues can determine the judgment" lang={lang}/>}{slug==='criticgui'&&i===3&&<ArticleFigure src="/images/criticgui/atomic-example.png" title="An aligned atomic-action example" lang={lang}/>}{slug==='criticgui'&&i===5&&<ArticleFigure src="/images/criticgui/human-demonstration-workflow.png" title={lang==='en'?'Human demonstrations and controlled negative cases':'人工演示与受控负例的制作流程'} lang={lang}/>}{slug==='criticgui'&&i===6&&<><ArticleFigure src="/images/criticgui/atomic-parser.png" title="Atomic action parser" lang={lang}/><ArticleFigure src="/images/criticgui-data-pipeline.png" title="Data collection pipeline" lang={lang}/></>}{slug==='nl2spec'&&i===1&&<><ArticleFigure src="/images/nl2spec/rebuilt/method1.png" title="Method 1 · Reason, then translate" lang={lang}/><ArticleFigure src="/images/nl2spec/rebuilt/method2.png" title="Method 2 · Translate, then reason" lang={lang}/></>}{slug==='nl2spec'&&i===3&&<div class="prompt-figures"><ArticleFigure src="/images/nl2spec/rebuilt/prompt_1.png" title="Semantic extraction prompt" lang={lang}/><ArticleFigure src="/images/nl2spec/rebuilt/prompt_2.png" title="Formula reasoning prompt" lang={lang}/></div>}</section>)}
