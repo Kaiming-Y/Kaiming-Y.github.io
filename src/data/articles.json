@@ -60,7 +60,7 @@
           "<p>这个方向连接了灵活的语言理解与明确、可检查的约束。LLM 可以提出候选关系，形式化工具则可以检查它是否成立。下一步可以加入蕴含检查，寻找违反候选公式的反例，并通过基准分别分析翻译错误与推理错误。</p><p>生成规约是验证的起点，而不是验证的完成。</p>"
         ]
       ],
-      "sources": "本项目在西安电子科技大学<a href=\"https://jisuan.xidian.edu.cn/yjsgk/yjsjj.htm\">计算理论与技术研究所（ICTT）</a>开展，由<a href=\"https://faculty.xidian.edu.cn/YUBIN/zh_CN/index.htm\">于斌副教授</a>指导。"
+      "sources": "本项目在西安电子科技大学<a href=\"https://jisuan.xidian.edu.cn/yjsgk/yjsjj.htm\">计算理论与技术研究所（ICTT）</a>开展，由<a href=\"https://faculty.xidian.edu.cn/YUBIN/zh_CN/index.htm\">于斌教授</a>指导。"
     }
   },
   "criticgui": {
