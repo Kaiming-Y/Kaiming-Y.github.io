@@ -29,7 +29,7 @@
           "<p>The useful connection here is between flexible language understanding and explicit, inspectable constraints. An LLM can propose the hidden relationship; formal tools can then help test whether that proposal is justified. A next step would be an entailment check that searches for a counterexample to the candidate formula, alongside a benchmark that separates translation errors from reasoning errors.</p><p>This is the distinction I want the project to make visible: producing a specification is the beginning of validation, not its completion.</p>"
         ]
       ],
-      "sources": "This project was supervised by <a href=\"https://faculty.xidian.edu.cn/YUBIN/zh_CN/index.htm\">Prof. Bin Yu</a> at the <a href=\"http://ictt.xidian.edu.cn/\">Institute of Computing Theory and Technology (ICTT), Xidian University</a>."
+      "sources": "This project was supervised by <a href=\"https://faculty.xidian.edu.cn/YUBIN/zh_CN/index.htm\">Prof. Bin Yu</a> at the <a href=\"https://jisuan.xidian.edu.cn/yjsgk/yjsjj.htm\">Institute of Computing Theory and Technology (ICTT), Xidian University</a>."
     },
     "zh": {
       "subtitle": "从两句话中，找到没有被直接说出的时序关系",
@@ -60,7 +60,7 @@
           "<p>这个方向连接了灵活的语言理解与明确、可检查的约束。LLM 可以提出候选关系，形式化工具则可以检查它是否成立。下一步可以加入蕴含检查，寻找违反候选公式的反例，并通过基准分别分析翻译错误与推理错误。</p><p>生成规约是验证的起点，而不是验证的完成。</p>"
         ]
       ],
-      "sources": "本项目在西安电子科技大学<a href=\"http://ictt.xidian.edu.cn/\">计算理论与技术研究所（ICTT）</a>开展，由<a href=\"https://faculty.xidian.edu.cn/YUBIN/zh_CN/index.htm\">于斌副教授</a>指导。"
+      "sources": "本项目在西安电子科技大学<a href=\"https://jisuan.xidian.edu.cn/yjsgk/yjsjj.htm\">计算理论与技术研究所（ICTT）</a>开展，由<a href=\"https://faculty.xidian.edu.cn/YUBIN/zh_CN/index.htm\">于斌副教授</a>指导。"
     }
   },
   "criticgui": {
