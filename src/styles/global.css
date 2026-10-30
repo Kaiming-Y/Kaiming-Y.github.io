@@ -281,3 +281,26 @@ body{background-image:radial-gradient(ellipse at 6% 8%,var(--wash-blue),transpar
 .huawei-research-item h4{font-size:16px;line-height:1.45;margin:0 0 5px;font-weight:650}
 .huawei-research-item .job-description{margin:0}
 @media(max-width:760px){.huawei-research{gap:16px}.huawei-research-item{padding-left:12px}.huawei-research-item h4{font-size:15px}}
+
+/* Readable rhythm for the expanded research perspective. */
+.intro-content{min-width:0}
+.research-interests{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+.research-interests .interest-tags{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}
+.research-interests .interest-tags>span{display:flex;align-items:center;justify-content:flex-start;gap:8px;min-width:0;padding:10px 12px;line-height:1.45;border-radius:9px}
+.interest-tags .profile-icon{flex-shrink:0}
+.research-focus{display:flex;flex-direction:column;gap:0;margin:24px 0;padding:0}
+.research-focus>li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;padding:18px 0;border-bottom:1px solid var(--line);align-items:start}
+.research-focus>li:last-child{border-bottom:0;padding-bottom:4px}
+.research-focus .focus-index{font-size:12px;font-variant-numeric:tabular-nums;line-height:26px;color:var(--accent)}
+.research-focus strong{display:block;font-size:16px;line-height:1.5;margin-bottom:6px;font-weight:600}
+.research-focus p{font-size:15px;line-height:1.8;margin:0;max-width:78ch;text-wrap:pretty}
+.huawei-research{gap:20px;margin-top:20px}
+.huawei-research-item h4{margin-bottom:6px}
+@media(min-width:761px) and (max-width:1050px){.research-interests .interest-tags{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+ .research-interests{margin-top:23px;padding-top:19px}
+ .research-interests .interest-tags{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .research-interests .interest-tags>span{font-size:12px;padding:9px;gap:6px}
+ .research-focus>li{grid-template-columns:25px minmax(0,1fr);gap:10px;padding:16px 0}
+ .research-focus strong{font-size:15px}.research-focus p{font-size:14px;line-height:1.85}
+}
