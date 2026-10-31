@@ -3,10 +3,10 @@ import Icon from './ProfileIcon.astro';
 import {copy,type Lang,type Project} from '../data/portfolio';
 const {project:p,lang}=Astro.props as {project:Project,lang:Lang};
 const t=copy[lang];const base=lang==='en'?'/':'/zh/';
-const figures:Record<string,{src:string;alt:string}>={dream:{src:'/images/dream-teaser.png',alt:'Dream.exe teaser showing robot manipulation benchmark demonstrations'},adahc:{src:'/images/adahc-overview.png',alt:'AdaHC overview: CDT constructor, planner and executor'},libra:{src:'/images/libra-overview.png',alt:'Libra overview: sequence placement, tiled attention pool and executor'},nl2spec:{src:'/images/nl2spec-cover-v2.png',alt:'nl2spec++ cross-sentence reasoning with two alternative routes to candidate LTL specifications'},worldgui:{src:'/images/worldgui-benchmark.png',alt:'WorldGUI benchmark overview'},criticgui:{src:'/images/criticgui-overview.png',alt:'CriticGUI overview combining GUI agent exploration and human demonstrations'}};
+const figures:Record<string,{src:string;alt:string}>={'proactive-directory':{src:'/images/proactive-directory.svg',alt:'LowEntropyAI proactive AI research directory'},dream:{src:'/images/dream-teaser.png',alt:'Dream.exe teaser showing robot manipulation benchmark demonstrations'},adahc:{src:'/images/adahc-overview.png',alt:'AdaHC overview: CDT constructor, planner and executor'},libra:{src:'/images/libra-overview.png',alt:'Libra overview: sequence placement, tiled attention pool and executor'},nl2spec:{src:'/images/nl2spec-cover-v2.png',alt:'nl2spec++ cross-sentence reasoning with two alternative routes to candidate LTL specifications'},worldgui:{src:'/images/worldgui-benchmark.png',alt:'WorldGUI benchmark overview'},criticgui:{src:'/images/criticgui-overview.png',alt:'CriticGUI overview combining GUI agent exploration and human demonstrations'}};
 const figure=figures[p.id];
 const tagIcons:Record<string,string>={
-  'Video Generation':'video', 'Embodied AI':'agent', 'Physical Reasoning':'space',
+  'Proactive Agents':'agent', 'Research Directory':'document', 'Video Generation':'video', 'Embodied AI':'agent', 'Physical Reasoning':'space',
   'Computer-use Agents':'monitor', 'GUI Benchmark':'benchmark',
   'Dynamic Environments':'world', 'Self-reflection':'refresh',
   'Multimodal Understanding':'eye', 'Critic Evaluation':'benchmark',

@@ -152,6 +152,12 @@ export const collaborations:Project[]=[
       "Long-context Training",
       "Load Balancing"
     ]
+  },
+  {
+    id:'proactive-directory', name:'Awesome Proactive Agent', type:'project', venue:'', authors:'',
+    title:'LowEntropyAI', tags:['Proactive Agents','Research Directory'],
+    description:{en:'I maintain this guide to research on when an AI agent should take the initiative. It brings together papers, agents and benchmarks for studying those decisions.',zh:'我在 LowEntropyAI 维护这个研究导航，收录关于主动式智能体的论文、系统和评测基准，关注智能体何时应主动介入，以及如何提供帮助。'},
+    links:[{label:'Website',url:'https://lowentropyai.github.io/awesome-proactive-agent/'}]
   }
 ];
 export const copy={
